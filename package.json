@@ -13,6 +13,7 @@
   "@std/esm": "cjs",
   "dependencies": {
     "@std/esm": "^0.19.6",
+    "ramda": "^0.25.0",
     "redux": "^3.7.2",
     "socket.io": "^2.0.4"
   }
