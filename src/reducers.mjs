@@ -2,7 +2,9 @@ import { combineReducers } from 'redux';
 import { union, length, assocPath } from 'ramda';
 
 import { JOIN_GAME, NEXT_TURN } from './constants';
-import { initAction } from './actions';
+import { initAction as initActionCreator } from './actions';
+
+const initAction = initActionCreator();
 
 const playersReducer = (state = [], action) => {
   if (action.type === JOIN_GAME && length(state) < 2)
@@ -17,15 +19,19 @@ const turnReducer = (state = false, action, players) => {
   else return state;
 };
 
+const lastActionReducer = (state = initAction, action) => action;
+
 const defaultState = {
-  players: playersReducer(undefined, initAction()),
-  turn: turnReducer(undefined, initAction())
+  players: playersReducer(undefined, initAction),
+  turn: turnReducer(undefined, initAction),
+  lastAction: lastActionReducer(undefined, initAction)
 };
 
 const reducer = (state = defaultState, action) => {
+  const lastAction = lastActionReducer(state.lastAction, action);
   const players = playersReducer(state.players, action);
   const turn = turnReducer(state.turn, action, players);
-  return { players, turn };
+  return { lastAction, players, turn };
 };
 
 export default reducer;
